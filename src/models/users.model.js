@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import bcrypt from "bcrypt"
 const userSchema =new mongoose.Schema({
     username:{
         type:String,
@@ -26,6 +26,22 @@ const userSchema =new mongoose.Schema({
         default:Date.now
     }
 })
+
+userSchema.pre('save',async function save(next) {
+    if(!this.isModified('passowrd'))return next()
+    try{
+        this.password=await bcrypt.hash(this.password,10)
+        return next()}
+        catch(err){
+            return next(err)
+        }
+})
+
+userSchema.methods.validatePassword=async function validatePassword(passowrd) {
+    return bcrypt.compare(passowrd,this.passowrd)
+}
+
+
 
 const User=new mongoose.model("User",userSchema)
 

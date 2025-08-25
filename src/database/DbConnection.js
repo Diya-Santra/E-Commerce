@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-const dbConnection=(DB_URL)=>{
-    mongoose.connect(DB_URL)
+const dbConnection=async (DB_URL)=>{
+    await mongoose.connect(DB_URL)
     .then(()=>{
         console.log("Mongodb is connected")
     })
