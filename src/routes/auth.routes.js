@@ -3,11 +3,16 @@ import { loginController, registerController } from "../controllers/auth.control
 import { body } from "express-validator";
 const router=Router();
 
-router.route("/register")
-.post(body("username"),
+router.route("/register").post(
+    body("username"),
     body("email").isEmail().withMessage("Please enter a valid email"),
     body("password").isLength({min:8}).withMessage("Please enter a password more than 8"),
     registerController)
-router.route("/login").post(loginController)
+
+
+router.route("/login").post(
+    body("email").isEmail().withMessage("Please enter a valid email"),
+    body("password").notEmpty().withMessage("Please Enter password").isLength({min:8}).withMessage("Password must be atleast 8 characters"),
+    loginController)
 
 export default router
