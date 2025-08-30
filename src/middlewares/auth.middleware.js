@@ -1,19 +1,19 @@
 import jwt from "jsonwebtoken";
-import { ApiError } from "../utils/ApiError";
-import User from "../models/users.model";
-import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/ApiError.js";
+import User from "../models/users.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const isLoggedIn = asyncHandler(async (req, res, next) => {
-  const accesstoken = req.cookies.accesstoken;
+  const accesstoken = req.cookies.accessToken;
   if (!accesstoken) {
-    throw ApiError(401, "not authorized");
+    throw new ApiError(401, "not authorized");
   }
   const decoded = jwt.verify(accesstoken, process.env.JWT_SECRET);
-  if (!decoded.username) {
+  if (!decoded.email) {
     throw new ApiError(401, "not valid");
   }
   const existingUser = await User.findOne({
-    username: decoded.username,
+    email: decoded.email,
   });
   req.userId = existingUser._id;
   next();
