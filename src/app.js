@@ -1,11 +1,12 @@
 import express from "express"
 import cookieParser from "cookie-parser"
 import authRouter from "./routes/auth.routes.js"
+import usersRouter from "./routes/users.routes.js"
 const app=express()
 
 //middlewares
 app.use(express.json())
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.urlencoded({
     extended:true
 }))
@@ -13,8 +14,6 @@ app.use(express.urlencoded({
 
 //routes
 app.use("/api/v1/auth",authRouter)
-app.get("/healthCheck",(req,res)=>{
-    return res.json (new ApiRespone(200,"server running"))
-})
+app.use("/api/v1/user",usersRouter)
 
 export default app

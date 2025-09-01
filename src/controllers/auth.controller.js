@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 
 import { ApiError } from "../utils/ApiError.js";
 import User from "../models/users.model.js";
-import { ApiRespone } from "../utils/ApiResponse.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -33,7 +33,7 @@ export const registerController = asyncHandler(async (req, res) => {
   res.cookie("accessToken", accessToken);
   res.cookie("refreshToken", refreshToken);
 
-  return res.json(new ApiRespone(200, user));
+  return res.json(new ApiResponse(200, user));
 });
 
 //login controller
@@ -49,7 +49,7 @@ export const loginController = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(400, "user doesn't exist");
   }
-  const isPassWordValid = user.validatePassword(password);
+  const isPassWordValid = await user.validatePassword(password);
   if (!isPassWordValid) {
     throw new ApiError(401, "please enter a valid password");
   }
@@ -58,7 +58,7 @@ export const loginController = asyncHandler(async (req, res) => {
   res.cookie("accessToken", accessToken);
   res.cookie("refreshToken", refreshToken);
 
-  return res.json(new ApiRespone(200, "Logged in successfully"));
+  return res.json(new ApiResponse(200, "Logged in successfully"));
 });
 
 //refresh token
@@ -84,7 +84,7 @@ export const refreshTokenController = asyncHandler(async (req, res) => {
   res.cookie("accessToken", token);
   res.cookie("refreshToken", newRefreshToken);
 
-  res.json(new ApiRespone(200, "New token generated"));
+  res.json(new ApiResponse(200, "New token generated"));
 });
 
 //logout controller
@@ -93,5 +93,5 @@ export const logoutController = asyncHandler(async (req, res) => {
   res.clearCookie("refreshToken");
   await User.findByIdAndUpdate(req.userId, { refreshToken: "" });
 
-  res.json(new ApiRespone(200, "Logged out successfully"));
+  res.json(new ApiResponse(200, "Logged out successfully"));
 });

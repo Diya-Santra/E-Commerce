@@ -2,7 +2,7 @@ import express from "express";
 import dbConnection from "./database/DbConnection.js";
 import app from "./app.js";
 import dotenv from "dotenv"
-import { ApiRespone } from "./utils/ApiResponse.js";
+import { ApiResponse } from "./utils/ApiResponse.js";
 
 dotenv.config();
 
