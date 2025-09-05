@@ -6,18 +6,23 @@ import {
   deleteReviewControlle,
   getAllReviewsController,
 } from "../controllers/reviews.controller.js";
+import { body } from "express-validator";
 
 const router = Router();
 
 //creating review
-router.route("/create/:id").post(isLoggedIn, createReviewController);
+router
+  .route("/create/:id")
+  .post(isLoggedIn, body("rating"), body("comment"), createReviewController);
 
 //update review
-router.route("/update/:id").put(isLoggedIn, updateReviewsController);
+router
+  .route("/update/:id")
+  .put(isLoggedIn, body("rating"), body("comment"), updateReviewsController);
 
 //delete review route
 router.route("/delete/:id").delete(isLoggedIn, deleteReviewControlle);
 
 //getting all reviews for a product
-router.route("/reviews/:id").get(getAllReviewsController);
+router.route("/all/:id").get(getAllReviewsController);
 export default router;

@@ -68,6 +68,10 @@ export const getAllProductsController = asyncHandler(async (req, res) => {
 
 //updating product by id
 export const updateProductByIdController = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ApiError(400, "validation error", errors.array);
+  }
   const { id } = req.params;
   const imageUrl = await uploadToCloudinary(req.file.path);
   const { name, description, price, category, stock } = req.body;

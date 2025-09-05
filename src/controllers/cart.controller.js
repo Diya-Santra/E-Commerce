@@ -8,6 +8,10 @@ import cart from "../models/carts.model.js";
 
 //adding a product to cart
 export const addItemToCartController = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ApiError(401, errors.array()[0].msg);
+  }
   const { quantity, product_id } = req.body;
   const userId = req.userId;
   const ifProductExist = await products.findById(product_id);
@@ -35,6 +39,10 @@ export const addItemToCartController = asyncHandler(async (req, res) => {
 
 //update a product to cart
 export const updateProductInCart = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ApiError(401, errors.array()[0].msg);
+  }
   const { id } = req.params;
   const userId = req.userId;
 

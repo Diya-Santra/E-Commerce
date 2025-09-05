@@ -4,9 +4,15 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import reviews from "../models/reviews.model.js";
 import User from "../models/users.model.js";
 import products from "../models/products.model.js";
+import { validationResult } from "express-validator";
+
 
 //creating a review for  a product
 export const createReviewController = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ApiError(401, errors.array()[0].msg);
+  }
   const { id } = req.params;
   const userId = req.userId;
   const { rating, comment } = req.body;
@@ -29,6 +35,10 @@ export const createReviewController = asyncHandler(async (req, res) => {
 
 //update all review for a product
 export const updateReviewsController = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ApiError(401, errors.array()[0].msg);
+  }
   const { id } = req.params;
   const userId = req.userId;
   const isExist = await products.findById(id);
